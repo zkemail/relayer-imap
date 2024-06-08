@@ -1,1 +1,8 @@
 /target
+.env
+
+# Vs code settings
+.vscode
+
+# Mac
+.DS_Store
