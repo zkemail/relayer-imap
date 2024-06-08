@@ -1,0 +1,26 @@
+[package]
+name = "relayer-imap"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0.86"
+dotenv = "0.15.0"
+async-imap = { version = "0.9.1", default-features = false, features = [
+    "runtime-tokio",
+] }
+async-native-tls = { version = "0.5.0", default-features = false, features = [
+    "runtime-tokio",
+] }
+futures = "0.3.28"
+oauth2 = "4.3.0"
+tokio = { version = "1.0", features = ["full"] }
+tiny_http = "0.12.0"
+webbrowser = "0.8.11"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0.68"
+slog = { version = "2.7.0", features = ["max_level_trace", "release_max_level_warn"] }
+relayer-utils = { git = "https://github.com/zkemail/relayer-utils" }
+reqwest = "0.12.4"
