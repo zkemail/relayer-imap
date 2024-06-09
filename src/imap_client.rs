@@ -125,7 +125,6 @@ impl ImapClient {
         loop {
             match self.session.uid_search("UNSEEN").await {
                 Ok(uids) => {
-                    trace!(LOG, "Got unseen emails: {:?}!", uids);
                     let mut results = vec![];
                     for uid in uids {
                         let res = self
