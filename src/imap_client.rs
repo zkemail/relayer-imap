@@ -112,6 +112,10 @@ impl ImapClient {
             }
         }
 
+        trace!(LOG, "Reconnecting...");
+        self.reconnect().await?;
+        trace!(LOG, "Reconnected!");
+
         Ok(self.get_unseen_emails().await?)
     }
 
