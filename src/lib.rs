@@ -50,7 +50,9 @@ pub async fn run() -> Result<()> {
             }
             Err(e) => {
                 error!(LOG, "Error retrieving emails: {}", e);
-                // Log the error and continue the loop to try again
+                trace!(LOG, "Reconnecting...");
+                imap_client.reconnect().await?;
+                trace!(LOG, "Reconnected!");
             }
         }
 

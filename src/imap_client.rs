@@ -112,11 +112,6 @@ impl ImapClient {
             }
         }
 
-        // let mut new_client = self.wait_new_email().await?;
-        trace!(LOG, "Reconnecting...");
-        self.reconnect().await?;
-        trace!(LOG, "Reconnected!");
-        // Ok((new_client.get_unseen_emails().await?, new_client))
         Ok(self.get_unseen_emails().await?)
     }
 
@@ -145,7 +140,7 @@ impl ImapClient {
         }
     }
 
-    async fn reconnect(&mut self) -> Result<()> {
+    pub async fn reconnect(&mut self) -> Result<()> {
         const MAX_RETRIES: u32 = 5;
         let mut retry_count = 0;
 
@@ -155,7 +150,8 @@ impl ImapClient {
                     self.session = new_client.session;
                     return Ok(());
                 }
-                Err(_) => {
+                Err(e) => {
+                    error!(LOG, "Error during reconnection: {:?}", e);
                     retry_count += 1;
                     std::thread::sleep(std::time::Duration::from_millis(1000));
                 }
