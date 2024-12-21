@@ -10,11 +10,10 @@ use anyhow::Result;
 use relayer_utils::LOG;
 use slog::{error, info, trace};
 
-pub async fn run() -> Result<()> {
-    let mut imap_client = ImapClient::new(ImapConfig::new()).await?;
+pub async fn run(config: RelayerIMAPConfig) -> Result<()> {
+    let mut imap_client = ImapClient::new(config.imap_config).await?;
     let client = reqwest::Client::new();
-    let relayer_endpoint =
-        std::env::var(strings::RELAYER_ENDPOINT_KEY).expect("RELAYER_ENDPOINT not set");
+    let relayer_endpoint = config.relayer_endpoint;
 
     loop {
         match imap_client.retrieve_new_emails().await {

@@ -4,5 +4,6 @@ use tokio;
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    run().await
+    let config = relayer_imap::config::RelayerIMAPConfig::new();
+    run(config).await
 }

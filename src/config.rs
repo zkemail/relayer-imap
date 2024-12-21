@@ -3,8 +3,28 @@ use crate::*;
 use std::env;
 
 use dotenv::dotenv;
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
+pub struct RelayerIMAPConfig {
+    pub imap_config: ImapConfig,
+    pub relayer_endpoint: String,
+}
+
+impl RelayerIMAPConfig {
+    pub fn new() -> Self {
+        dotenv().ok();
+
+        RelayerIMAPConfig {
+            imap_config: ImapConfig::new(),
+            relayer_endpoint: env::var(RELAYER_ENDPOINT_KEY).unwrap(),
+        }
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub enum ImapAuth {
     Password {
         user_id: String,
@@ -20,7 +40,8 @@ pub enum ImapAuth {
     },
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct ImapConfig {
     pub domain_name: String,
     pub port: u16,
