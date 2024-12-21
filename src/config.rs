@@ -12,6 +12,9 @@ pub struct RelayerIMAPConfig {
     pub relayer_endpoint: String,
 }
 
+unsafe impl Send for RelayerIMAPConfig {}
+unsafe impl Sync for RelayerIMAPConfig {}
+
 impl RelayerIMAPConfig {
     pub fn new() -> Self {
         dotenv().ok();
