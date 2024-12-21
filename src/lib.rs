@@ -1,7 +1,7 @@
 pub mod config;
 pub mod imap_client;
 pub mod strings;
-
+pub use crate::config::RelayerIMAPConfig;
 use config::*;
 use imap_client::*;
 use strings::*;
