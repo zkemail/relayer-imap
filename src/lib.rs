@@ -4,17 +4,37 @@ pub mod strings;
 
 use config::*;
 use imap_client::*;
+use serde::Serialize;
 use strings::*;
 
 use anyhow::Result;
 use relayer_utils::LOG;
 use slog::{error, info, trace};
 
+#[derive(Serialize)]
+struct RequestBody {
+    #[serde(rename = "rawEmail")]
+    raw_email: String,
+}
+
+#[derive(Serialize)]
+struct RequestParams {
+    action: String,
+    request: RequestBody,
+}
+
+#[derive(Serialize)]
+struct JsonPayload {
+    params: RequestParams,
+}
+
 pub async fn run() -> Result<()> {
     let mut imap_client = ImapClient::new(ImapConfig::new()).await?;
     let client = reqwest::Client::new();
     let relayer_endpoint =
         std::env::var(strings::RELAYER_ENDPOINT_KEY).expect("RELAYER_ENDPOINT not set");
+    let relayer_api_key =
+        std::env::var(strings::RELAYER_API_KEY_KEY).expect("RELAYER_API_KEY not set");
 
     loop {
         match imap_client.retrieve_new_emails().await {
@@ -25,8 +45,19 @@ pub async fn run() -> Result<()> {
                         if let Some(body) = fetch.body() {
                             let body = String::from_utf8(body.to_vec())?;
                             info!(LOG, "Email body: {}", body);
+                            let payload = JsonPayload {
+                                params: RequestParams {
+                                    action: "inbox".to_string(),
+                                    request: RequestBody { raw_email: body },
+                                },
+                            };
                             // Send a POST request to the relayer endpoint with the email body
-                            let res = client.post(&relayer_endpoint).body(body).send().await;
+                            let res = client
+                                .post(&relayer_endpoint)
+                                .bearer_auth(&relayer_api_key)
+                                .json(&payload)
+                                .send()
+                                .await;
                             match res {
                                 Ok(response) => {
                                     if response.status().is_success() {
