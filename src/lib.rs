@@ -63,7 +63,8 @@ pub async fn run() -> Result<()> {
                                     if response.status().is_success() {
                                         trace!(
                                             LOG,
-                                            "Email body successfully sent to the relayer endpoint"
+                                            "Email body successfully sent to the relayer endpoint: {}",
+                                            response.text().await?
                                         );
                                     } else {
                                         error!(LOG, "Failed to send email body to the relayer endpoint; HTTP status: {}", response.status());
