@@ -23,4 +23,4 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0.68"
 slog = { version = "2.7.0", features = ["max_level_trace", "release_max_level_warn"] }
 relayer-utils = { git = "https://github.com/zkemail/relayer-utils" }
-reqwest = "0.12.4"
+reqwest =  { version = "0.11.24", features = ["json"] }

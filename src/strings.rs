@@ -1,5 +1,6 @@
 // Config strings
 pub const RELAYER_ENDPOINT_KEY: &str = "RELAYER_ENDPOINT";
+pub const RELAYER_API_KEY_KEY: &str = "RELAYER_API_KEY";
 pub const IMAP_LOGIN_ID_KEY: &str = "IMAP_LOGIN_ID";
 pub const IMAP_DOMAIN_NAME_KEY: &str = "IMAP_DOMAIN_NAME";
 pub const IMAP_PORT_KEY: &str = "IMAP_PORT";
